@@ -3,10 +3,8 @@
 // <p>For example, $3^2 + 4^2 = 9 + 16 = 25 = 5^2$.</p>
 // <p>There exists exactly one Pythagorean triplet for which $a + b + c = 1000$.<br>Find the product $abc$.</p>
 
-use num::pow;
 
 
-fn approach_1(n: u32) -> u32 {
     // a^2+b^2 = c^2
     // a+b+c = 1000
     // a<b<c
@@ -19,22 +17,31 @@ fn approach_1(n: u32) -> u32 {
     //      a(2000-2b) = 1000000-2000b
     //      a = (1000000-2000b)/(2000-2b) = 2000(500-b)/(2000-2b)
     //      a = 1000(500-a)/(1000-b)
+fn approach_1() -> Option<u32> {
+    fn b_f(a: f32) -> f32 {
+        1000.0*(500.0-a)/(1000.0-a)
+    }
 
-    let a: f32= 10.0;
-    let b: f32 = 1000.0*(500.0-a)/(1000.0-a);
-    let c: f32 = (a*a +b*b).sqrt();
-    println!("{} {} {}", a,b,c);
-    println!("{}", a+b+c);
+    // a cannot be greater than 500
+    for a in 1..500 {
+        let b = b_f(a as f32);
+        println!("{a} : {b}");
+        // check that is natural number
+        if b.floor()==b {
+            return Some(a*(b as u32)*(1000-a-(b as u32)))
 
-0
-   
+        }
+    }
+    None
+ 
 }
 
 
 
 fn main() {
 
-    let n = 1000;
-    let solution = approach_1(n);
-    println!(" Product of {} adjacent digits: {:?}", n, solution)
+    match approach_1() {
+        Some(res) => println!("Product of a*b*c: {res}"),
+        None => println!("Could not find solution")
+    }
 }
