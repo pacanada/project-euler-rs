@@ -3,6 +3,7 @@ use num::{PrimInt, NumCast};
 
 pub fn is_prime<T: PrimInt +std::fmt::Debug>(n: T)-> bool {
     // TODO: does it really need to be as ugly?
+    // TODO: use mod 6 approach for faster implementation
     let mut is_prime = true;
     let _2 = T::from(2).expect("Could not convert type use to integer");
     let _1 = T::one();
