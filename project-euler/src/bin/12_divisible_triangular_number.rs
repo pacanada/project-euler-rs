@@ -13,6 +13,7 @@
 // <p>We can see that $28$ is the first triangle number to have over five divisors.</p>
 // <p>What is the value of the first triangle number to have over five hundred divisors?</p>
 
+
 use project_euler::utils;
 
 
@@ -23,30 +24,25 @@ fn approach_1(target_number_divisors: u32) -> u32 {
     }
     fn get_number_of_divisors(number: u32) -> u32 {
         // we can consider a number like 10, with prime factors: 2,5. The possible arrangement with different set sizes are 2^length
-        // for numbers with duplicated prime factors like 12: 2,2,3 -> 1,2,3,4,6,12 -> 2^3-2^(d-1)
-    //     let mut number_of_divisors = 2;
-    //     for i in 2..number/2+ 1 {
-    //         if number % i == 0 {
-    //             number_of_divisors+=1;
-    //         }
-
-    //     }
-    //     number_of_divisors
-    // }
-
-    // let mut nth_candidate = 1;
-   
+        // for numbers with duplicated prime factors like 12: 2,2,3 -> 1,2,3,4,6,12
+        let prime_factors = utils::get_factors(number).unwrap();
+        // get the ocurrence count per number
+        let count_map = utils::convert_to_count_map(prime_factors);
+        // compute the number of possible arrangements of prime factors: prod_{i=1}^{n} = k_i +1 (being k_i the number of ocurrences)
+        let number_of_divisors = count_map.iter().fold(1, |acc, (_,v)| acc*(v+1));
+        number_of_divisors
+    }
+    let mut nth_candidate = 2;
    
     loop {
         
         let triangular_number = nth_triangular_number(nth_candidate);
         let n_divisors = get_number_of_divisors(triangular_number);
-        //println!("Checking for {nth_candidate}: {triangular_number}. Number of divisors: {n_divisors}");
         if nth_candidate%1000==0{
-            println!("Checking for {nth_candidate}: {triangular_number}. Number of divisors: {n_divisors}");
+           println!("Checking for triangular number in position {nth_candidate}: {triangular_number}. Number of divisors: {n_divisors}");
 
         }
-        if n_divisors == target_number_divisors {return  triangular_number;}
+        if n_divisors >= target_number_divisors {return  triangular_number;}
         nth_candidate+=1;
 
     }
@@ -54,19 +50,7 @@ fn approach_1(target_number_divisors: u32) -> u32 {
 
 fn main() {
     let n_divisors = 500;
-    println!("{:?}", utils::get_factors(56))
-    //let sol = approach_1(n_divisors);
-    // prime factors (1),2,5, 1 can be ignored, but how do we treat repeated factors?
-    //
-    // 1
-    // 2
-    // 5
-    // 1,2
-    // 1,5
-    // 2,5
-    // 1,2,5
+    let sol = approach_1(n_divisors);
 
-    // is it 2^prime factor-2^number of repeated factors?
-
-    //println!("The first triangle number with {n_divisors} divisors is {sol}");
+    println!("The first triangle number with {n_divisors} divisors is {sol}");
 }

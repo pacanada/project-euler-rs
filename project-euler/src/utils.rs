@@ -1,4 +1,6 @@
 
+use std::{collections::HashMap, hash::Hash};
+
 use num::{PrimInt, NumCast};
 
 pub fn is_prime<T: PrimInt +std::fmt::Debug>(n: T)-> bool {
@@ -53,4 +55,19 @@ pub fn get_factors<T: PrimInt + NumCast+std::fmt::Debug>(n: T) -> Option<Vec<T>>
     }
 
 Some(factors)
+}
+
+///
+/// Convert a vector of type T into a hashmap with the key being T and the value the count of
+/// ocurrences
+///
+pub fn convert_to_count_map<T: PrimInt + NumCast + Hash>(vec: Vec<T>)-> HashMap<T,u32> {
+    let mut factor_track = HashMap::<T,u32>::new();
+    for i in &vec {
+        match factor_track.get(&i) {
+            Some(v) => {factor_track.insert(*i, v+1);},
+            None => {factor_track.insert(*i, 1);}
+        }
+    }
+    return factor_track
 }
