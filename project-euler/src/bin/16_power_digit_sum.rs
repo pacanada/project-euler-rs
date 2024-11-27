@@ -19,7 +19,7 @@ fn approach_1(exponent: u32) -> u32 {
     // }
     let n = BigUint::from_u32(2).unwrap().pow(exponent);
     println!("Number: {n}");
-    println!("{}", BigUint);
+    //println!("{}", BigUint);
     // string approach (will not work for big numbers)
     let string_of_number = n.to_string();
     string_of_number.chars().map(|c| c.to_digit(10).unwrap()).sum()

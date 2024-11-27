@@ -1,7 +1,7 @@
 
-use std::{collections::HashMap, hash::Hash};
+use std::{collections::HashMap, hash::Hash, ops::{Add, AddAssign, MulAssign}};
 
-use num::{PrimInt, NumCast};
+use num::{NumCast, One, PrimInt};
 
 pub fn is_prime<T: PrimInt +std::fmt::Debug>(n: T)-> bool {
     // TODO: does it really need to be as ugly?
@@ -58,7 +58,7 @@ Some(factors)
 }
 
 ///
-/// Convert a vector of type T into a hashmap with the key being T and the value the count of
+/// Convert a vector of type T into a hashmap with the key being the number T and the value the count of
 /// ocurrences
 ///
 pub fn convert_to_count_map<T: PrimInt + NumCast + Hash>(vec: Vec<T>)-> HashMap<T,u32> {
@@ -71,3 +71,20 @@ pub fn convert_to_count_map<T: PrimInt + NumCast + Hash>(vec: Vec<T>)-> HashMap<
     }
     return factor_track
 }
+///
+/// Calculate factorial (suitable for big ints). clone is unnecessary for primitives
+///
+pub fn factorial<T: MulAssign + AddAssign + One + PartialOrd + Clone>(n: T)->T{
+   // doesnt work because of Step trait issue https://github.com/rust-lang/rust/issues/42168
+   // (T::one()..=n).fold(T::one(), |acc, x| acc*x)
+   let mut product: T = T::one();
+   let mut number: T = T::one();
+   while number<=n {
+    // we need clone to support big ints!
+    product*=number.clone();
+    number+=T::one();
+   }
+   product
+} 
+
+// Tests!!
